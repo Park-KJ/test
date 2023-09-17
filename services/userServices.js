@@ -59,7 +59,8 @@ const createUsers = async (req, res) => {
     //   throw error;
     // }
 
-    errorHandler(!email.includes("@" && "."), "email check plz", 400);
+    errorHandler(!email.includes("@"), "email check plz", 400);
+    errorHandler(!email.includes("."), "email check plz", 400);
 
     // if (!email.includes("@" && ".")) {
     //   const error = new Error("email check plz");

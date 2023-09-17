@@ -3,18 +3,17 @@ const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv").config();
 const morgan = require("morgan");
+const jwt = require("jsonwebtoken");
 
 const { DataSource } = require("typeorm");
-
-const jwt = require("jsonwebtoken");
 
 const app = express();
 app.use(cors());
 app.use(morgan("combined"));
 app.use(express.json());
 
-const userServices = require("./services/userServices_test_token");
-const postServices = require("./services/postServices_test_token");
+const userServices = require("./services/userServices_test");
+const postServices = require("./services/postServices_test");
 
 const AppDataSource = new DataSource({
   type: process.env.TYPEORM_CONNECTION,
@@ -28,12 +27,14 @@ const AppDataSource = new DataSource({
 const { errorHandler } = require("./errorHandler.js");
 
 // 실행
-app.get("/", userServices.welcome); // 메인홈
-app.get("/users", userServices.getUsers); // 유저데이터 화면
-app.post("/users", userServices.createUsers); // 회원가입
-app.post("/login", userServices.login); //  로그인
-app.post("/posts", postServices.createPosts); //  글 작성
-app.get("/posts", postServices.getPost); // 글 목록
+app.get("/", userServices.welcome); //  메인홈
+app.get("/users", userServices.getUsers); //  유저  :  목록
+app.post("/users", userServices.createUsers); //  유저  :  회원가입
+app.post("/login", userServices.login); //  유저  :  로그인
+app.delete("/deleteusers", userServices.deleteUser); //  유저  :  삭제
+app.get("/posts", postServices.getPost); //  글  :  목록
+app.post("/posts", postServices.createPosts); //  글  :  작성
+app.delete("/deleteposts", postServices.deletePost); //  글  :  삭제
 
 const server = http.createServer(app);
 
